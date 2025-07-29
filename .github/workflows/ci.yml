@@ -110,7 +110,8 @@ jobs:
         echo "Waiting for app to be ready..."
         STATUS_CODE=""
         for i in {1..30}; do
-          STATUS_CODE=$(curl --retry 5 --retry-delay 2 --connect-timeout 2 -s -o /dev/null -w "%{http_code}" http://$SERVICE_IP/)
+          STATUS_CODE=$(curl --retry 5 --retry-delay 2 --connect-timeout 2 -s -o /dev/null -w "%{http_code}" http://$SERVICE_IP/predict)
+
           if [ "$STATUS_CODE" -eq 200 ]; then
             echo "✅ App is ready at http://$SERVICE_IP"
             break
