@@ -85,7 +85,8 @@ jobs:
         kubectl apply -f kubercluster/deploy.yml
         kubectl apply -f kubercluster/service.yml
         kubectl rollout status deployment/iris-classifier-deployment --timeout=300s
-    
+
+
     - name: Run Locust Load Test
       run: |
         pip install locust -q
@@ -110,8 +111,7 @@ jobs:
         echo "Waiting for app to be ready..."
         STATUS_CODE=""
         for i in {1..30}; do
-          STATUS_CODE=$(curl --retry 5 --retry-delay 2 --connect-timeout 2 -s -o /dev/null -w "%{http_code}" http://$SERVICE_IP/predict)
-
+          STATUS_CODE=$(curl --retry 5 --retry-delay 2 --connect-timeout 2 -s -o /dev/null -w "%{http_code}" http://$SERVICE_IP/)
           if [ "$STATUS_CODE" -eq 200 ]; then
             echo "✅ App is ready at http://$SERVICE_IP"
             break
@@ -137,7 +137,4 @@ jobs:
         echo "### 🧪 Locust Load Test Summary" >> report.md
         echo "\`\`\`" >> report.md
         cat locust_report_stats.csv | head -n 10 >> report.md
-        echo "\`\`\`" >> report.md  
-     
-     
-    
+        echo "\`\`\`" >> report.md
